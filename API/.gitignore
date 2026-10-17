@@ -1,0 +1,24 @@
+# Build output
+bin/
+obj/
+artifacts/
+
+# NuGet packages restored locally
+packages/
+
+# Visual Studio and user-specific files
+.vs/
+*.user
+*.suo
+*.cache
+
+# Build artifacts
+*.dll
+*.exe
+*.pdb
+
+# Local secrets and certificates
+appsettings.Local.json
+appsettings.*.local.json
+secrets.json
+*.pfx
