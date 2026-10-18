@@ -1,1 +1,77 @@
-<p>people-list works!</p>
+<div class="people-container">
+    <div class="page-header">
+        <h2>People list</h2>
+
+        <button class="btn btn-success" routerLink="/add-person">
+            Add Person
+        </button>
+    </div>
+
+    @if (loading()) {
+        <p class="message">Loading people...</p>
+    }
+    @else if(errorMessage()) {
+        <p class="errpr">{{ errorMessage() }}</p>
+    }
+    @else if (people().length === 0) {
+        <p class="message">No people found.</p>
+    }
+    @else {
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Date Of Birth</th>
+                        <th>Gender</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for (person of people(); track person.id) {
+                        <tr>
+                            <td>{{ person.id }}</td>
+                            <td>{{ person.name }}</td>
+                            <td>{{ person.dateOfBirth | date: 'dd-MM-yyyy' }}</td>
+                            <td>{{ person.gender }}</td>
+                            <td class="actions">
+                                <button class="btn btn-primary btn-sm me-2" [routerLink]="['/edit-person', person.id]">
+                                    <i class="bi bi-pencil-square"></i>
+                                    Edit
+                                </button>
+
+                                <button class="btn btn-danger btn-sm" (click)="confirmDelete(person)">
+                                    <i class="bi bi-trash"></i>
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@if (personPendingDelete(); as person) {
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="delete-person-title">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="delete-person-title">Confirm delete</h2>
+                    <button type="button" class="btn-close" aria-label="Close" (click)="cancelDelete()"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete <strong>{{ person.name }}</strong>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+                    <button type="button" class="btn btn-danger" (click)="deletePerson()">Yes, delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

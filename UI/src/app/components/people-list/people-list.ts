@@ -1,9 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { PersonService } from '../../services/person';
 import { Person } from '../../models/person';
+import { RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  imports: [],
+  imports: [RouterLink, DatePipe],
   selector: 'app-people-list',
   styleUrl: './people-list.css',
   templateUrl: './people-list.html',
@@ -38,8 +40,8 @@ export class PeopleList implements OnInit{
     });
   }
 
-  confirmDelete(persom: Person): void {
-    this.personPendingDelete.set(null);
+  confirmDelete(person: Person): void {
+    this.personPendingDelete.set(person);
   }
 
   cancelDelete(): void {
