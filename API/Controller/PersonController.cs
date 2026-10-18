@@ -1,0 +1,61 @@
+using API.Model;
+using API.Service;
+using Microsoft.AspNetCore.Mvc;
+
+namespace API.Controller;
+
+[Route("api/[controller]")]
+[ApiController]
+public class PersonController : ControllerBase
+{
+    private readonly IPersonService _service;
+
+    public PersonController(IPersonService service)
+    {
+        _service = service;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var people = await _service.GetAll();
+        return Ok(people);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var person = await _service.GetById(id);
+        if(person == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(person);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(Person person)
+    {
+        await _service.Create(person);
+        return Ok("Person created successfully");
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, Person person)
+    {
+        var updatedPerson = await _service.Update(id, person);
+        if(!updatedPerson) return NotFound();
+
+        return Ok("Person updated successfully");
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var person = await _service.Delete(id);
+        if(!person) return NotFound();
+
+        return Ok("Person deleted successfully");
+    }
+}
