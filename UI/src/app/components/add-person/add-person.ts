@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PersonService } from '../../services/person';
+import { NotificationService } from '../../services/notification';
 
 @Component({
   selector: 'app-add-person',
@@ -14,6 +15,7 @@ import { PersonService } from '../../services/person';
 export class AddPerson {
 
   private personService = inject(PersonService);
+  private notification = inject(NotificationService);
   private router = inject(Router);
 
   errorMessage = '';
@@ -41,7 +43,7 @@ export class AddPerson {
       gender: this.person.gender
     }).subscribe({
       next: () => {
-        alert('Person added successfully!');
+        this.notification.show('Person added successfully!', 'success');
         this.router.navigate(['/people']);
       },
       error: () => {

@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Home } from './components/home/home';
+import { NotificationService } from './services/notification';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +11,5 @@ import { Home } from './components/home/home';
 })
 export class App {
   protected readonly title = signal('UI');
+  readonly notification = inject(NotificationService);
 }

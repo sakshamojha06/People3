@@ -3,6 +3,7 @@ import { PersonService } from '../../services/person';
 import { Person } from '../../models/person';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { NotificationService } from '../../services/notification';
 
 @Component({
   imports: [RouterLink, DatePipe],
@@ -13,6 +14,7 @@ import { DatePipe } from '@angular/common';
 export class PeopleList implements OnInit{
 
   private personService = inject(PersonService);
+  private notification = inject(NotificationService);
 
   people = signal<Person[]>([]);
   loading = signal(false);
@@ -58,9 +60,11 @@ export class PeopleList implements OnInit{
       next: () => {
         this.personPendingDelete.set(null);
         this.people.update(people => people.filter(item => item.id !== person.id));
+        this.notification.show('Person deleted successfully!', 'success');
       },
       error: () => {
         this.personPendingDelete.set(null);
+        this.notification.show('Unable to delete person.', 'danger');
       }
     });
   }

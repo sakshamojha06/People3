@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PersonService } from '../../services/person';
 import { Person } from '../../models/person';
+import { NotificationService } from '../../services/notification';
 
 @Component({
   selector: 'app-edit-person',
@@ -15,6 +16,7 @@ import { Person } from '../../models/person';
 export class EditPerson implements OnInit {
 
   private personService = inject(PersonService);
+  private notification = inject(NotificationService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -57,11 +59,8 @@ export class EditPerson implements OnInit {
 
     this.personService.Update(this.person.id, this.person).subscribe({
       next: () => {
-        this.router.navigate(['/people'], {
-          state: {
-            successMessage: 'Person updated successfully!'
-          }
-        });
+        this.notification.show('Person updated successfully!', 'success');
+        this.router.navigate(['/people']);
       },
       error: () => {
         this.errorMessage = 'Unable to update person!';
